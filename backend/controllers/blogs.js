@@ -40,7 +40,7 @@ const deleteBlog = async (req, res) => {
   if (blog.user.toString() !== req.user.id) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ msg: 'Not authorized' });
   }
-  await Blog.findByIdAndRemove(req.params.id);
+  await Blog.findByIdAndDelete(req.params.id);
   res.status(StatusCodes.OK).json({ msg: 'Blog removed' });
 };
 
