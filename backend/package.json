@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --watchAll --coverage",
     "build:ui": "cd ../client && npm run build && cp -r dist ../backend",
-    "deploy:ui": "cd .. && git add . && git commit -m 'deploying' && git push render main"
+    "deploy:ui": "cd .. && git add . && git commit -m 'deploying' && git push "
   },
   "keywords": [],
   "author": "Muhammad Bashir Ibrahim",
