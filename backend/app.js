@@ -21,6 +21,7 @@ const limiter = rateLimit({
 });
 // Middlewares
 app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(express.static('dist')); // Middleware to serve static files
 app.use(helmet()); // Helmet middleware to set security headers
 app.use(limiter); // Rate limiter middleware to limit requests
 app.use(xxsClean()); // Middleware to sanitize user input from XSS attacks
