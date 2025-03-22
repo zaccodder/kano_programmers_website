@@ -3,7 +3,6 @@ require('express-async-errors');
 const { rateLimit } = require('express-rate-limit');
 const app = express();
 const helmet = require('helmet');
-const cors = require('cors');
 const xxsClean = require('xss-clean');
 const {
   requestLogger,
@@ -21,7 +20,6 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 // Middlewares
-app.use(cors());
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(helmet()); // Helmet middleware to set security headers
 app.use(limiter); // Rate limiter middleware to limit requests
