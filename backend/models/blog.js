@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const BlogSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -10,10 +14,30 @@ const BlogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    author: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User', // Reference to the User model
+      required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+    },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment', // Reference to the Comment model
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -25,6 +49,5 @@ mongoose.set('toJSON', {
     delete ret.__v;
   },
 });
-const Blog = mongoose.model('Blog', BlogSchema);
 
-module.exports = Blog;
+module.exports = mongoose.model('Blog', BlogSchema);

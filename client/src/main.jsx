@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ToastContainer />
     <Provider store={store}>
-      <Router future={{ v7_startTransition: true }}>
+      <Router future={{ v7_relativeSplatPath: true }}>
         <App />
       </Router>
     </Provider>

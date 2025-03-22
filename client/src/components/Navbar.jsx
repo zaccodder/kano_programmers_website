@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AlignJustify } from 'lucide-react';
+import { AlignJustify, Pen } from 'lucide-react';
 const Navbar = ({ user, setUser }) => {
   // Get theme from localStorage or default to 'cmyk'
   const [theme, setTheme] = useState(
@@ -46,6 +46,14 @@ const Navbar = ({ user, setUser }) => {
         <Link to='/blogs' className='btn btn-ghost btn-sm rounded-btn'>
           Blogs
         </Link>
+        {user && (
+          <Link
+            to={`/@${user.name}`}
+            className='btn btn-ghost btn-sm rounded-btn'
+          >
+            Profile
+          </Link>
+        )}
         {user ? (
           <div className='avatar'>
             <div className='ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2'>
@@ -107,26 +115,6 @@ const Navbar = ({ user, setUser }) => {
         </label>
       </div>
       <div className='flex items-center space-x-5 lg:hidden'>
-        {user && (
-          <div className='avatar'>
-            <div className='ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2'>
-              {user?.profileImage ? (
-                <img
-                  src={user?.profileImage}
-                  alt={user?.name}
-                  className='w-10 h-10 rounded-full'
-                />
-              ) : (
-                <div className='w-10 h-10 rounded-full bg-primary flex items-center justify-center text-neutral font-bold text-lg shadow-md'>
-                  {user?.name.split(' ')[0][0].toUpperCase() +
-                    user?.name
-                      .split(' ')
-                      [user?.name.split(' ').length - 1][0].toUpperCase()}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         <div className='block dropdown dropdown-bottom dropdown-end lg:hidden'>
           <div tabIndex={0} role='button' className='m-1 btn'>
             <AlignJustify />
@@ -144,6 +132,14 @@ const Navbar = ({ user, setUser }) => {
             <Link to='/blogs' className='btn btn-ghost btn-sm rounded-btn'>
               Blogs
             </Link>
+            {user && (
+              <Link
+                to={`/@${user.name}`}
+                className='btn btn-ghost btn-sm rounded-btn mb-2'
+              >
+                Profile
+              </Link>
+            )}
             {user ? (
               <button className='btn btn-primary btn-sm mb-10' onClick={logout}>
                 Logout
@@ -156,6 +152,7 @@ const Navbar = ({ user, setUser }) => {
                 Login
               </Link>
             )}
+
             <label className=' swap swap-rotate' onClick={toggleTheme}>
               {/* this hidden checkbox controls the state */}
               <input

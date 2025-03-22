@@ -69,6 +69,7 @@ const Login = ({ setToken }) => {
               value={formData.password}
               onChange={onChange}
               required
+              autoComplete='false'
               className='w-full input input-bordered'
               placeholder='Enter your password'
             />

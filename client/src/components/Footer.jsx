@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Linkedin, Github } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Github, X } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -33,11 +33,6 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
-              <li>
-                <Link to='/contact' className='link link-hover'>
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -46,25 +41,29 @@ const Footer = () => {
             <h3 className='text-xl font-bold'>Follow Us</h3>
             <div className='flex mt-2 space-x-4'>
               <a
-                href='https://facebook.com'
+                href='https://facebook.com/muhdbashiriibrahim'
+                target='_blank'
                 className='text-gray-500 hover:text-primary'
               >
                 <Facebook size={20} />
               </a>
               <a
-                href='https://twitter.com'
+                href='https://x.com/Zaccodder'
+                target='_blank'
                 className='text-gray-500 hover:text-primary'
               >
-                <Twitter size={20} />
+                <X size={20} />
               </a>
               <a
-                href='https://linkedin.com'
+                href='https://www.linkedin.com/in/muhammad-ibrahim-71202320a/'
+                target='_blank'
                 className='text-gray-500 hover:text-primary'
               >
                 <Linkedin size={20} />
               </a>
               <a
-                href='https://github.com'
+                href='https://github.com/zaccodder'
+                target='_blank'
                 className='text-gray-500 hover:text-primary'
               >
                 <Github size={20} />

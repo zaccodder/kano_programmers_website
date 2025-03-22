@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateBlog } from '../api/blogsSlice';
+import { updateBlogAction } from '../reducers/blogsSlice';
+import { Loader } from 'lucide-react';
 
 const UpdateBlog = ({ user }) => {
   const { id } = useParams();
@@ -11,68 +11,95 @@ const UpdateBlog = ({ user }) => {
   const blog = useSelector((state) =>
     state.blogs.blogs.find((b) => b.id === id)
   );
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  // useEffect(() => {
-  //   if (blog) {
-  //     setTitle(blog.title);
-  //     setContent(blog.content);
-  //   } else {
-  //     dispatch(fetchBlogById(id));
-  //   }
-  // }, [blog, dispatch, id]);
+  // Load blog data when component mounts
+  useEffect(() => {
+    if (blog) {
+      setTitle(blog.title);
+      setContent(blog.content);
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [blog]);
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateBlog({ id, title, content, author: user.name }));
-    navigate(`/profile/${user.name}`);
+    setSaving(true);
+
+    await dispatch(updateBlogAction({ id, title, content, author: user.name }));
+
+    setSaving(false);
+    navigate(`/profile/${user.name}`); // Redirect to user's profile page
   };
 
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center min-h-screen bg-base-200'>
+        <Loader className='animate-spin text-primary' size={40} />
+      </div>
+    );
+  }
+
   return (
-    <div className='flex flex-col items-center min-h-screen py-8 bg-gray-100 dark:bg-dark-background'>
-      <div className='w-full max-w-2xl p-6 mb-8 bg-white rounded-sm shadow-md dark:bg-dark-primary'>
-        <h1 className='mb-4 text-3xl font-bold text-gray-800 dark:text-dark-text'>
-          Update Blog
+    <div className='flex items-center justify-center min-h-screen bg-base-200 px-4'>
+      <div className='w-full max-w-4xl p-8 space-y-6 shadow-xl card bg-base-100 glass rounded-xl'>
+        <h1 className='text-4xl font-extrabold text-primary text-center'>
+          Update Your Blog ✍️
         </h1>
-        <form onSubmit={handleSubmit}>
-          <div className='mb-4'>
-            <label
-              className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-              htmlFor='title'
-            >
-              Title
+        <form onSubmit={handleSubmit} className='space-y-6'>
+          {/* Title Input */}
+          <div className='form-control'>
+            <label className='label text-lg font-medium text-neutral'>
+              Blog Title
             </label>
             <input
               type='text'
-              id='title'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none focus:outline-hidden focus:shadow-outline dark:bg-dark-secondary dark:text-dark-text'
+              className='w-full p-4 input input-bordered focus:ring-2 focus:ring-primary'
               required
             />
           </div>
-          <div className='mb-4'>
-            <label
-              className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-              htmlFor='content'
-            >
-              Content
+
+          {/* Content Textarea */}
+          <div className='form-control'>
+            <label className='label text-lg font-medium text-neutral'>
+              Blog Content
             </label>
             <textarea
-              id='content'
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none focus:outline-hidden focus:shadow-outline dark:bg-dark-secondary dark:text-dark-text'
+              rows='10'
+              className='w-full p-4 textarea textarea-bordered focus:ring-2 focus:ring-primary'
               required
             />
           </div>
-          <div className='flex items-center justify-between'>
+
+          {/* Buttons */}
+          <div className='flex justify-between flex-col md:flex-row space-y-2'>
             <button
               type='submit'
-              className='px-4 py-2 font-bold text-white bg-blue-500 rounded-sm hover:bg-blue-700 focus:outline-hidden focus:shadow-outline'
+              className={`btn btn-primary  w-full md:w-auto btn-sm ${
+                saving && 'loading'
+              }`}
+              disabled={saving}
             >
-              Update Blog
+              {saving ? 'Updating...' : 'Update Blog'}
+            </button>
+
+            <button
+              type='button'
+              className='btn btn-outline w-full md:w-auto btn-sm'
+              onClick={() => navigate(-1)}
+            >
+              Cancel
             </button>
           </div>
         </form>
@@ -80,11 +107,5 @@ const UpdateBlog = ({ user }) => {
     </div>
   );
 };
-
-// UpdateBlog.propTypes = {
-//   user: PropTypes.shape({
-//     name: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 export default UpdateBlog;

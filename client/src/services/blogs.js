@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseUrl = '/api/v1/blogs';
 
-const getAll = async () => {
+const getAllBlogs = async () => {
   try {
     const res = await axios.get(baseUrl);
     return res.data;
@@ -11,7 +11,7 @@ const getAll = async () => {
   }
 };
 
-const create = async (newBlog, token) => {
+const createBlog = async (newBlog, token) => {
   try {
     const res = await axios.post(baseUrl, newBlog, {
       headers: {
@@ -24,9 +24,9 @@ const create = async (newBlog, token) => {
   }
 };
 
-const update = async (id, updatedBlog, token) => {
+const updateBlog = async (blog, token) => {
   try {
-    const res = await axios.put(`${baseUrl}/${id}`, updatedBlog, {
+    const res = await axios.put(`${baseUrl}/${blog._id}`, blog, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -37,26 +37,11 @@ const update = async (id, updatedBlog, token) => {
   }
 };
 
-const remove = async (id, token) => {
+const updateComment = async (commentId, comment, token) => {
   try {
-    const res = await axios.delete(`${baseUrl}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    return error.response.data;
-  }
-};
-
-const createComment = async (blogId, text, token) => {
-  console.log('blogId', blogId);
-
-  try {
-    const res = await axios.post(
-      `${baseUrl}/${blogId}/comments`,
-      { text },
+    const res = await axios.put(
+      `${baseUrl}/comments/${commentId}`,
+      { comment },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -69,4 +54,55 @@ const createComment = async (blogId, text, token) => {
   }
 };
 
-export default { getAll, create, update, remove, createComment };
+const deleteBlog = async (id, token) => {
+  try {
+    const res = await axios.delete(`${baseUrl}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const likeBlog = async (id, token) => {
+  try {
+    const res = await axios.put(`${baseUrl}/${id}/like`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const createComment = async (blogId, comment, token) => {
+  try {
+    const res = await axios.post(
+      `${baseUrl}/${blogId}/comments`,
+      { comment },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export default {
+  getAllBlogs,
+  createBlog,
+  updateBlog,
+  likeBlog,
+  updateComment,
+  deleteBlog,
+  createComment,
+};

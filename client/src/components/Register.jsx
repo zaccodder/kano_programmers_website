@@ -28,7 +28,7 @@ const Register = () => {
       }
 
       toast.success('Registration successful!');
-      navigate('/login');
+      navigate('/log-in');
     } catch (err) {
       console.error(err);
       toast.error('Something went wrong. Please try again.');
@@ -88,6 +88,7 @@ const Register = () => {
               value={formData.password}
               onChange={onChange}
               required
+              autoComplete='false'
               className='w-full input input-bordered'
               placeholder='Enter your password'
             />

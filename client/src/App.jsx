@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { initializeBlogs } from './api/blogsSlice';
+import { initializeBlogs } from './reducers/blogsSlice';
 import {
   Home,
   About,
@@ -17,6 +17,7 @@ import {
   UpdateBlog,
   EditProfile,
 } from './components/index';
+import BlogsLayout from './components/BlogsLayout';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,7 +27,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
-  });
+  }, [dispatch]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -46,12 +47,18 @@ const App = () => {
           <Route path='/register' element={<Register />} />
           <Route path='/about' element={<About />} />
           <Route path='/log-in' element={<Login setToken={setToken} />} />
-          <Route path='/blogs' element={<Blogs />} />
+          <Route
+            path='/blogs'
+            element={<BlogsLayout user={user} token={token} />}
+          />
           {user && (
             <Route path={`/@${user.name}`} element={<Profile user={user} />}>
               <Route index element={<BlogsByEachUser user={user} />} />
-              <Route path='about' element={<AboutEachUser />} />
-              <Route path='create-blog' element={<CreateBlog />} />
+              <Route path='about' element={<AboutEachUser user={user} />} />
+              <Route
+                path='create-blog'
+                element={<CreateBlog token={token} />}
+              />
               <Route path='update-blog/:id' element={<UpdateBlog />} />
               <Route
                 path='edit-profile'

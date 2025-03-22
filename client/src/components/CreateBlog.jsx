@@ -1,87 +1,102 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createBlogAction } from '../api/blogsSlice';
+import { createBlogAction } from '../reducers/blogsSlice';
+import { PenBox } from 'lucide-react';
 
 const CreateBlog = ({ token }) => {
   const [newBlogs, setBlogs] = useState({
     title: '',
     content: '',
-    isPublic: false,
+    category: '',
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // handle post change
+  // Handle input changes
   const handlePostChange = (e) => {
     setBlogs({ ...newBlogs, [e.target.name]: e.target.value });
   };
 
-  // handle submission of blog
+  // Handle form submission
   const handlePostSubmit = (e) => {
     e.preventDefault();
     dispatch(createBlogAction(newBlogs, token));
-    setBlogs({ title: '', content: '', isPublic: false });
+    navigate(`/blogs`);
+
+    setBlogs({ title: '', content: '', category: '' });
   };
+
   return (
-    <div className='w-full max-w-2xl p-6 mb-8 bg-white rounded-sm shadow-md dark:bg-dark-primary'>
-      <h2 className='mb-4 text-2xl font-bold text-gray-800 dark:text-dark-text'>
-        Create a New Post
-      </h2>
-      <form onSubmit={handlePostSubmit}>
-        <div className='mb-4'>
-          <label
-            className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-            htmlFor='title'
-          >
-            Title
-          </label>
-          <input
-            type='text'
-            name='title'
-            value={newBlogs.title}
-            onChange={handlePostChange}
-            required
-            className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none dark:text-dark-text focus:outline-hidden focus:shadow-outline'
-          />
+    <div className='flex justify-center min-h-screen bg-base-200 p-6 w-full'>
+      <div className='card w-full max-w-2xl bg-base-100 shadow-xl'>
+        <div className='card-body'>
+          {/* Header */}
+          <h2 className='text-2xl font-bold flex items-center gap-2 text-primary'>
+            <PenBox size={24} /> Create a New Blog
+          </h2>
+
+          {/* Form */}
+          <form onSubmit={handlePostSubmit} className='space-y-4'>
+            {/* Title */}
+            <div>
+              <label className='label'>
+                <span className='text-sm font-bold'>Title</span>
+              </label>
+              <input
+                type='text'
+                name='title'
+                value={newBlogs.title}
+                onChange={handlePostChange}
+                required
+                className='input input-bordered w-full'
+              />
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className='label'>
+                <span className='text-sm font-bold'>Category</span>
+              </label>
+              <select
+                name='category'
+                value={newBlogs.category}
+                onChange={handlePostChange}
+                required
+                className='select select-bordered w-full'
+              >
+                <option value='' disabled>
+                  Select a category
+                </option>
+                <option value='Technology'>Technology</option>
+                <option value='Science'>Science</option>
+                <option value='Health'>Health</option>
+                <option value='Education'>Education</option>
+                <option value='Business'>Business</option>
+              </select>
+            </div>
+
+            {/* Content */}
+            <div>
+              <label className='label'>
+                <span className='text-sm font-bold'>Content</span>
+              </label>
+              <textarea
+                name='content'
+                value={newBlogs.content}
+                onChange={handlePostChange}
+                required
+                className='textarea textarea-bordered w-full h-32'
+              ></textarea>
+            </div>
+
+            {/* Submit Button */}
+            <button type='submit' className='btn btn-primary w-full'>
+              Post
+            </button>
+          </form>
         </div>
-        <div className='mb-4'>
-          <input
-            type='checkbox'
-            name='isPublic'
-            value={newBlogs.isPublic}
-            onChange={() =>
-              setBlogs({ ...newBlogs, isPublic: !newBlogs.isPublic })
-            }
-            className='mr-2 leading-tight'
-          />
-          <label
-            className='text-sm font-bold text-gray-700 dark:text-dark-text'
-            htmlFor='isPublic'
-          >
-            Is public ?
-          </label>
-        </div>
-        <div className='mb-4'>
-          <label
-            className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-            htmlFor='content'
-          >
-            Content
-          </label>
-          <textarea
-            name='content'
-            value={newBlogs.content}
-            onChange={handlePostChange}
-            required
-            className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none dark:text-dark-text focus:outline-hidden focus:shadow-outline h-32'
-          ></textarea>
-        </div>
-        <button
-          type='submit'
-          className='px-4 py-2 font-bold text-white bg-blue-500 rounded-sm hover:bg-blue-700 focus:outline-hidden focus:shadow-outline'
-        >
-          Post
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

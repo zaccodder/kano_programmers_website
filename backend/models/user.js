@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Blog',
+      ref: 'Blog', // Reference to the Blog model
     },
   ],
 });
@@ -30,4 +30,5 @@ mongoose.set('toJSON', {
     delete ret.password;
   },
 });
+
 module.exports = mongoose.model('User', UserSchema);

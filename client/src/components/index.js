@@ -17,7 +17,7 @@ import Footer from './Footer';
 import Navbar from './Navbar';
 import BlogsByEachUser from './BlogsByEachUser';
 import AboutEachUser from './AboutEachUser';
-import SingleProfile from './SingleProfile';
+// import SingleProfile from './SingleProfile';
 import CreateBlog from './CreateBlog';
 import UpdateBlog from './UpadateBlog';
 import EditProfile from './EditProfile';
@@ -27,7 +27,7 @@ export const nav_links = [
   'Machine Learning',
   'Data Science',
   'Blockchain',
-  'Crpto Currency',
+  'Crypto Currency',
 ];
 
 export {
@@ -41,7 +41,6 @@ export {
   Navbar,
   BlogsByEachUser,
   AboutEachUser,
-  SingleProfile,
   CreateBlog,
   UpdateBlog,
   EditProfile,

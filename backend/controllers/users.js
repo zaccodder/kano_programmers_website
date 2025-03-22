@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('../utils/config');
+const { JWT_SECRET, JWT_EXPIRES_IN } = require('../utils/config');
 const { StatusCodes } = require('http-status-codes');
 
 // signup controller
@@ -40,7 +40,7 @@ const login = async (req, res) => {
     id: user._id,
   };
   const token = jwt.sign(userForToken, JWT_SECRET, {
-    expiresIn: 60 * 60,
+    expiresIn: 24 * 60 * 60 * 7,
   });
 
   res
@@ -49,7 +49,7 @@ const login = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find({}).populate('blogs', { title: 1 });
+  const users = await User.find({}).populate('blogs');
 
   res.status(StatusCodes.OK).json({ users });
 };

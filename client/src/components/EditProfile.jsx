@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { updateUserProfile, fetchUserProfile } from '../api/userSlice';
+import { Loader, User, Mail, Pencil } from 'lucide-react';
 
 const EditProfile = ({ user }) => {
   const dispatch = useDispatch();
@@ -10,82 +9,111 @@ const EditProfile = ({ user }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setName(user.name);
-  //     setEmail(user.email);
-  //     setBio(user.bio || '');
-  //   } else {
-  //     dispatch(fetchUserProfile());
-  //   }
-  // }, [user, dispatch]);
+  // Load user data
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setBio(user.bio || '');
+      setLoading(false);
+    }
+  }, [user]);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   dispatch(updateUserProfile({ name, email, bio }));
-  //   navigate(`/profile/${user.name}`);
-  // };
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+
+    // Simulate saving (Replace with actual dispatch)
+    setTimeout(() => {
+      setSaving(false);
+      navigate(`/profile/${user.name}`);
+    }, 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center min-h-screen bg-base-200'>
+        <Loader className='animate-spin text-primary' size={40} />
+      </div>
+    );
+  }
 
   return (
-    <div className='flex flex-col items-center min-h-screen py-8 bg-gray-100 dark:bg-dark-background'>
-      <div className='w-full max-w-2xl p-6 mb-8 bg-white rounded-sm shadow-md dark:bg-dark-primary'>
-        <h1 className='mb-4 text-3xl font-bold text-gray-800 dark:text-dark-text'>
-          Edit Profile
+    <div className='flex items-center justify-center min-h-screen bg-base-200 px-4 w-full'>
+      <div className='w-full max-w-3xl p-8 space-y-6 shadow-xl card bg-base-100 glass rounded-xl'>
+        <h1 className='text-4xl font-extrabold text-primary text-center'>
+          Edit Profile <Pencil size={28} className='inline-block ml-2' />
         </h1>
-        <form onSubmit={() => console.log('submit')}>
-          <div className='mb-4'>
-            <label
-              className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-              htmlFor='name'
-            >
+        <form onSubmit={handleSubmit} className='space-y-6'>
+          {/* Name Input */}
+          <div className='form-control'>
+            <label className='label text-lg font-medium text-neutral'>
               Name
             </label>
-            <input
-              type='text'
-              id='name'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none focus:outline-hidden focus:shadow-outline dark:bg-dark-secondary dark:text-dark-text'
-              required
-            />
+            <div className='relative'>
+              <User className='absolute left-4 top-3 text-gray-400' size={20} />
+              <input
+                type='text'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className='w-full pl-12 p-4 input input-bordered focus:ring-2 focus:ring-primary'
+                required
+              />
+            </div>
           </div>
-          <div className='mb-4'>
-            <label
-              className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-              htmlFor='email'
-            >
+
+          {/* Email Input */}
+          <div className='form-control'>
+            <label className='label text-lg font-medium text-neutral'>
               Email
             </label>
-            <input
-              type='email'
-              id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none focus:outline-hidden focus:shadow-outline dark:bg-dark-secondary dark:text-dark-text'
-              required
-            />
+            <div className='relative'>
+              <Mail className='absolute left-4 top-3 text-gray-400' size={20} />
+              <input
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className='w-full pl-12 p-4 input input-bordered focus:ring-2 focus:ring-primary'
+                required
+              />
+            </div>
           </div>
-          <div className='mb-4'>
-            <label
-              className='block mb-2 text-sm font-bold text-gray-700 dark:text-dark-text'
-              htmlFor='bio'
-            >
+
+          {/* Bio Input */}
+          <div className='form-control'>
+            <label className='label text-lg font-medium text-neutral'>
               Bio
             </label>
             <textarea
-              id='bio'
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className='w-full px-3 py-2 leading-tight text-gray-700 border rounded-sm shadow-sm appearance-none focus:outline-hidden focus:shadow-outline dark:bg-dark-secondary dark:text-dark-text'
+              rows='5'
+              className='w-full p-4 textarea textarea-bordered focus:ring-2 focus:ring-primary'
             />
           </div>
-          <div className='flex items-center justify-between'>
+
+          {/* Buttons */}
+          <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-between'>
             <button
               type='submit'
-              className='px-4 py-2 font-bold text-white bg-blue-500 rounded-sm hover:bg-blue-700 focus:outline-hidden focus:shadow-outline'
+              className={`btn btn-primary w-full md:w-auto ${
+                saving && 'loading'
+              }`}
+              disabled={saving}
             >
-              Save Changes
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+
+            <button
+              type='button'
+              className='btn btn-outline w-full md:w-auto'
+              onClick={() => navigate(-1)}
+            >
+              Cancel
             </button>
           </div>
         </form>
@@ -93,13 +121,5 @@ const EditProfile = ({ user }) => {
     </div>
   );
 };
-
-// EditProfile.propTypes = {
-//   user: PropTypes.shape({
-//     name: PropTypes.string.isRequired,
-//     email: PropTypes.string.isRequired,
-//     bio: PropTypes.string,
-//   }).isRequired,
-// };
 
 export default EditProfile;
